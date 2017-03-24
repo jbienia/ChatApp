@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Toast.makeText(
                        getApplicationContext(),
-                        "Something went wrong :(",
+                        "Something went wrong :(" + statusCode + " "+responseString,
                         Toast.LENGTH_LONG
                 ).show();
             }
