@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                        Gson gson = new Gson();
                        Message message = gson.fromJson(data, Message.class);
                        messageAdapter.add(message);
-                       Log.d("EVNT FIRE", message.text);
+                       Log.d("EVNT FIRE", "hey");
 
                        // have the ListView scroll down to the new message
                        messagesView.setSelection(messageAdapter.getCount() - 1);
@@ -117,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
         // Used to convert an item in the array list of messages to a view
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+
+            // an wrapper objec that holds a reference to the views that make up the line items
             MessageViewHolder holder;
 
             // if there is not already a view created for an item in the Message list.
@@ -175,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * A wrapper for the views that make up each line item
+     */
     private static class MessageViewHolder {
         public ImageView thumbnailImageView;
         public TextView senderView;

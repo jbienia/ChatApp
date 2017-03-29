@@ -18,7 +18,7 @@ android {
         }
     }
 }
-        repositories
+repositories
         {
             maven { url 'http://clojars.org/repo' }
         }
@@ -28,12 +28,20 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.2.0'
-    testCompile 'junit:junit:4.12'
 
-            //compile 'org.apache.httpcomponents:httpcore:4.4.1'
-            compile 'com.pusher:pusher-java-client:1.0.0'
-            compile 'com.loopj.android:android-async-http:1.4.9' // for our HTTP requests later
-            compile 'com.google.code.gson:gson:2.2.4' // for parsing JSON
-            compile 'com.squareup.picasso:picasso:2.1.1' // for image rendering
+    //compile 'org.apache.httpcomponents:httpcore:4.4.1'
+    // for our HTTP requests later
+    // for parsing JSON
+    // for image rendering
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.pusher:pusher-java-client:1.0.0'
+    compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.squareup.picasso:picasso:2.1.1'
+    compile 'com.google.firebase:firebase-database:10.2.0'
+    compile 'com.android.support:design:25.2.0'
+    testCompile 'junit:junit:4.12'
 }
+
+
+apply plugin: 'com.google.gms.google-services'
