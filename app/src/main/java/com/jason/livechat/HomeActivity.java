@@ -17,6 +17,8 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.Iterator;
+
 import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class HomeActivity extends AppCompatActivity {
@@ -25,6 +27,7 @@ public class HomeActivity extends AppCompatActivity {
     DatabaseReference roomsRef = myRef1.child("Rooms");
     DatabaseReference user = myRef1.child("users");
     JSONObject jSon;
+    JSONObject jSonRooms;
     Intent intent ;
 
     @Override
@@ -39,15 +42,27 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Object value = dataSnapshot.getValue();
+                DataSnapshot convert = dataSnapshot.child("Rooms");
+                Object roomValue = convert.getValue();
 
                 Gson gSon = new Gson();
 
                 try
                 {
                     jSon = new JSONObject(value.toString());
+
+                    // an json object of the rooms
+                    jSonRooms = new JSONObject(roomValue.toString());
+
+                    //String thing = jSon.toString();
+                  // JSONArray array = new JSONArray(value.toString());
+
+                    Log.d("array", jSonRooms.toString());
+
+                    //array = new getJsonArray(value.toString());
                 }
                 catch(Exception e) {
-                    Log.d("JB", e.getMessage().toString());
+                    Log.d("Arryerror", e.getMessage().toString());
                 }
 
                 try
@@ -82,6 +97,7 @@ public class HomeActivity extends AppCompatActivity {
     {
         // saves a reference to the key
         DatabaseReference roomsKey = myRef1.child("Rooms").push();
+
         //Creates a new room
         roomsKey.setValue("tech");
 
@@ -89,6 +105,7 @@ public class HomeActivity extends AppCompatActivity {
        //Log.d("KEY", roomsKey.getKey());;
         String keyForRoom = roomsKey.getKey();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         //preferences.getString("username","true");
         //Log.d("IntentData",  preferences.getString("userName","crap"));
         myRef1.child("users").child(preferences.getString("userName","crap")).child(keyForRoom).setValue("true");
@@ -96,10 +113,33 @@ public class HomeActivity extends AppCompatActivity {
         Log.d("JSON", jSon.toString());
 
         try {
-            Log.d("Jb", ""+ jSon.getString("-KgXERnxl7H6L5yA5zZj"));
+            Log.d("Jb", ""+ jSonRooms.getString("-KgXRVZiJMbVTfnLllK0"));
         }catch (Exception e) {
             Log.d("error", e.getMessage());;
         }
 
+    }
+
+    public void joinRoom(View V)
+    {
+        Log.d("Check", jSon.optString("Rooms"));
+
+        // keys used to iterate through the rooms
+        Iterator<String> keys = (Iterator<String>)jSonRooms.keys();
+       // Log.d("keys", keys.);
+
+        // Loops through the keys in the Rooms table
+        try {
+            while(keys.hasNext())
+            {
+                String key = keys.next();
+
+                // Access each value for each key
+                Log.d("What is this", jSonRooms.getString(key).toString());
+            }
+        }catch (Exception e) {
+            Log.d("join Error", e.getMessage());
+
+        }
     }
 }

@@ -11,7 +11,7 @@
     tools:context="com.jason.livechat.HomeActivity">
 
     <Button
-        android:text="Button"
+        android:text="New Room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -20,4 +20,15 @@
         android:layout_marginTop="31dp"
         android:id="@+id/button2"
         android:onClick="newRoom"/>
+
+    <Button
+        android:text="Join Room"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button2"
+        android:layout_alignStart="@+id/button2"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="74dp"
+        android:id="@+id/button3"
+        android:onClick="joinRoom"/>
 </RelativeLayout>
