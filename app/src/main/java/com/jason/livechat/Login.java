@@ -1,6 +1,9 @@
 package com.jason.livechat;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,8 +28,7 @@ public class Login extends AppCompatActivity {
     DatabaseReference reference;
     DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference();
     JSONObject jSon;
-
-
+    String passwordFromDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +54,14 @@ public class Login extends AppCompatActivity {
                 {
                     // Retrieves the password given a specific user name
                     log.d("JB",jSon.getJSONObject("users").getString("Lury"));
-                    String thing = jSon.getJSONObject("users").getString("Lury");
-                    Log.d("THING",thing.toString() );
 
+                    //JSONArray thing =  jSon.getJSONArray("users");
+                    //Log.d("THING",jSon.getJSONObject("users").get("Lury"));
+
+                    //Object lury = jSon.getJSONObject("users").get("Lury");
+
+                    // substing retrives the password
+                   // Log.d("THING", thing.substring(12,thing.length() - 1));
                     // used to detect if there is a current user in the database
                     log.d("BOOL",""+jSon.getJSONObject("users").has("ben"));
                 }
@@ -71,8 +78,12 @@ public class Login extends AppCompatActivity {
     }
 
     public void register(View view) {
+        EditText userNameTextField = (EditText) findViewById(R.id.email);
+        username = userNameTextField.getText().toString();
+        EditText passwordTextField = (EditText) findViewById(R.id.password);
+        password = passwordTextField.getText().toString();
 
-        // Creates a parent node with two children. Put new username and password into the databas
+        // Creates a parent node with two children. Put new username and password into the database
         myRef1.child("users").child(username).child("password").setValue(password);
     }
 
@@ -82,21 +93,31 @@ public class Login extends AppCompatActivity {
        // Button signIn = (Button)findViewById(R.id.email_sign_in_button);
         //signIn.setText("Register");
 
-
-
-
-       EditText userNameTextField = (EditText) findViewById(R.id.email);
-      username = userNameTextField.getText().toString();
+        EditText userNameTextField = (EditText)findViewById(R.id.email);
+        username = userNameTextField.getText().toString();
         EditText passwordTextField = (EditText) findViewById(R.id.password);
         password = passwordTextField.getText().toString();
 
-
-
         try
         {
-            if(jSon.getJSONObject("users").has(username) && jSon.getJSONObject("users").getString(username) == password)
+            if(jSon.getJSONObject("users").has(username))
             {
-                log.d("IT IEXITS,","Good");
+                // the password from the database
+                passwordFromDatabase = jSon.getJSONObject("users").optString(username);
+                log.d("JB",passwordFromDatabase.substring(12,passwordFromDatabase.length() - 1));
+                log.d("PWORD",password);
+
+                // Checks that the password from the datbase is the same as the one entered by the user
+                if(passwordFromDatabase.substring(12,passwordFromDatabase.length() - 1).equals(password))
+                {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("userName",username);
+                    editor.commit();
+
+                    Intent intent = new Intent(this,HomeActivity.class);
+                    startActivity(intent);
+                }
             }
         }
         catch(Exception e)
@@ -109,10 +130,6 @@ public class Login extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance();
         reference = mDatabase.getReference();
         reference.orderByChild("Users");
-
-
-        //DatabaseReference myRef1 = FirebaseDatabase.getInstance().getReference();
-
 
     }
 }
