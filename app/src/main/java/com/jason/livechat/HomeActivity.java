@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -93,22 +94,31 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Uses a push() to add a new room with a key onto the rooms table.
+     * Adds a key value pair of the room to the creater of the room as well
+     * @param v
+     */
     public void newRoom(View v)
     {
-        // saves a reference to the key
+        // Creates a reference to the newly added rooms key and pushes it onto the table
         DatabaseReference roomsKey = myRef1.child("Rooms").push();
 
-        //Creates a new room
-        roomsKey.setValue("tech");
+        // Retrieves the text from the user entered field. The name of their new room
+        EditText newRoom = (EditText)findViewById(R.id.edTxtNewRoom);
 
-        // retrieves the key
-       //Log.d("KEY", roomsKey.getKey());;
+        // Sets the value of the newly generated key in rooms table
+        roomsKey.setValue(newRoom.getText().toString());
+
+        // retrieves the key in string form
         String keyForRoom = roomsKey.getKey();
+
+        // used to get the username stored in Shared Preferences
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        //preferences.getString("username","true");
-        //Log.d("IntentData",  preferences.getString("userName","crap"));
-        myRef1.child("users").child(preferences.getString("userName","crap")).child(keyForRoom).setValue("true");
+        // Adds the key value pair entered by the user to the users table
+        myRef1.child("users").child(preferences.getString("userName","crap")).child(keyForRoom).setValue(newRoom.getText().toString());
+
        // Log.d("key", roomsKey.toString());
         Log.d("JSON", jSon.toString());
 
@@ -120,6 +130,10 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Iterates throught the rooms keys and returns their values
+     * @param V
+     */
     public void joinRoom(View V)
     {
         Log.d("Check", jSon.optString("Rooms"));
@@ -134,6 +148,7 @@ public class HomeActivity extends AppCompatActivity {
             {
                 String key = keys.next();
 
+
                 // Access each value for each key
                 Log.d("What is this", jSonRooms.getString(key).toString());
             }
@@ -141,5 +156,9 @@ public class HomeActivity extends AppCompatActivity {
             Log.d("join Error", e.getMessage());
 
         }
+
+        // if the room exists - join it - add the room to the user
+        // Check functionality of the login now that we have added rooms to a user
+        // doesn' exist - create it?
     }
 }

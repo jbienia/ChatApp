@@ -10,25 +10,34 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.jason.livechat.HomeActivity">
 
-    <Button
-        android:text="New Room"
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Enter Room Name"
+        android:ems="10"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="21dp"
-        android:layout_marginTop="31dp"
-        android:id="@+id/button2"
-        android:onClick="newRoom"/>
+        android:layout_alignStart="@+id/button3"
+        android:layout_marginTop="12dp"
+        android:id="@+id/edTxtNewRoom" />
 
     <Button
         android:text="Join Room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/button2"
-        android:layout_alignStart="@+id/button2"
-        android:layout_marginStart="14dp"
-        android:layout_marginTop="74dp"
+        android:layout_marginTop="117dp"
         android:id="@+id/button3"
-        android:onClick="joinRoom"/>
+        android:onClick="joinRoom"
+        android:layout_below="@+id/button2"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="OK"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button2"
+        android:onClick="newRoom"
+        android:layout_alignTop="@+id/edTxtNewRoom"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="24dp" />
 </RelativeLayout>
