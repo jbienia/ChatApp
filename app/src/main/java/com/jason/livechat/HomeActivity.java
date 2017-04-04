@@ -1,26 +1,30 @@
 package com.jason.livechat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-
-import static com.loopj.android.http.AsyncHttpClient.log;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -30,6 +34,9 @@ public class HomeActivity extends AppCompatActivity {
     JSONObject jSon;
     JSONObject jSonRooms;
     Intent intent ;
+    ArrayList<String> roomsList;
+    Iterator<String> keys;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +45,19 @@ public class HomeActivity extends AppCompatActivity {
 
         intent= getIntent();
 
+         roomsList = new ArrayList<String>();
+
+        context = this;
+
+
 
         myRef1.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Object value = dataSnapshot.getValue();
                 DataSnapshot convert = dataSnapshot.child("Rooms");
                 Object roomValue = convert.getValue();
-
-                Gson gSon = new Gson();
 
                 try
                 {
@@ -55,34 +66,28 @@ public class HomeActivity extends AppCompatActivity {
                     // an json object of the rooms
                     jSonRooms = new JSONObject(roomValue.toString());
 
-                    //String thing = jSon.toString();
-                  // JSONArray array = new JSONArray(value.toString());
-
-                    Log.d("array", jSonRooms.toString());
-
-                    //array = new getJsonArray(value.toString());
+                    // all the keys on the rooms table
+                    keys = jSonRooms.keys();
                 }
                 catch(Exception e) {
-                    Log.d("Arryerror", e.getMessage().toString());
+                     e.getMessage();
                 }
 
                 try
                 {
-                    // Retrieves the password given a specific user name
-                   // log.d("JB",jSon.getJSONObject("users").getString("Lury"));
+                    // Loops through the keys of the rooms table using an iterator. keys is an iterator object
+                    while(keys.hasNext())
+                    {
+                        String key = keys.next();
+                        roomsList.add(jSonRooms.getString(key));
+                    }
 
-                    //JSONArray thing =  jSon.getJSONArray("users");
-                    //Log.d("THING",jSon.getJSONObject("users").get("Lury"));
-
-                    //Object lury = jSon.getJSONObject("users").get("Lury");
-
-                    // substing retrives the password
-                    // Log.d("THING", thing.substring(12,thing.length() - 1));
-                    // used to detect if there is a current user in the database
-                    //log.d("BOOL",""+jSon.getJSONObject("users").has("ben"));
+                    // Sets the adapter after the array list is populated
+                    setAdapter(roomsList);
                 }
+
                 catch(Exception e) {
-                    log.d("error","error");
+                    e.getMessage();
                 }
             }
 
@@ -92,6 +97,67 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    /**
+     * Helper method used to creater a new adapter and set it to the list view
+     * @param rooms an array list of rooms from the firebase db
+     */
+    public void setAdapter(ArrayList<String> rooms)
+    {
+        UserAdapter adapter = new UserAdapter(context,R.layout.chat,roomsList);
+
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.listViewRooms);
+        listView.setAdapter(adapter);
+    }
+
+    /**
+     * The Adapter object
+     */
+    private class UserAdapter extends ArrayAdapter<String> {
+
+        private ArrayList<String> items;
+
+
+        public UserAdapter(Context context, int textViewResourceId, ArrayList<String> items) {
+            super(context, textViewResourceId, items);
+            this.items = items;
+        }
+
+        //This method is called once for every item in the ArrayList as the list is loaded.
+        //It returns a View -- a list item in the ListView -- for each item in the ArrayList
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Log.d("daROoom",":LKJL:KJLILK" );
+            View v = convertView;
+            if (v == null) {
+                LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                v = vi.inflate(R.layout.chat, null);
+            }
+
+            String room = items.get(position);
+
+            if (room != null) {
+               TextView bodyView = (TextView)v.findViewById(R.id.message_body);
+
+
+                if (bodyView != null) {
+                    bodyView.setText("Room: " + room);
+                }
+            }
+            return v;
+        }
     }
 
     /**
@@ -127,7 +193,6 @@ public class HomeActivity extends AppCompatActivity {
         }catch (Exception e) {
             Log.d("error", e.getMessage());;
         }
-
     }
 
     /**
@@ -156,9 +221,5 @@ public class HomeActivity extends AppCompatActivity {
             Log.d("join Error", e.getMessage());
 
         }
-
-        // if the room exists - join it - add the room to the user
-        // Check functionality of the login now that we have added rooms to a user
-        // doesn' exist - create it?
     }
 }
