@@ -202,6 +202,8 @@ public class HomeActivity extends AppCompatActivity {
     public void joinRoom(View V)
     {
         Log.d("Check", jSon.optString("Rooms"));
+        EditText room = (EditText)findViewById(R.id.edTxtNewRoom);
+        String stringRoom = room.getText().toString();
 
         // keys used to iterate through the rooms
         Iterator<String> keys = (Iterator<String>)jSonRooms.keys();
@@ -213,10 +215,33 @@ public class HomeActivity extends AppCompatActivity {
             {
                 String key = keys.next();
 
+//                Log.d("ROom", room.getText().toString());
+//                Log.d("key", key);
+//                Log.d("value", jSonRooms.getString(key).toString());
+
+
+                String fromKey = jSonRooms.getString(key).toString();
+
+                Log.d("room", stringRoom);
+                Log.d("keyRoom", fromKey);
+
+                if(fromKey.equals(stringRoom))
+                {
+                    Log.d("We in here??", "Must be");
+                    Intent intent = new Intent(this,MainActivity.class);
+
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("room",room.getText().toString());
+
+                    editor.commit();
+
+                    startActivity(intent);
+                }
 
                 // Access each value for each key
-                Log.d("What is this", jSonRooms.getString(key).toString());
-                
+                //Log.d("What is this", jSonRooms.getString(key).toString());
+
             }
         }catch (Exception e) {
             Log.d("join Error", e.getMessage());

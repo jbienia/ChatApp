@@ -2,7 +2,9 @@ package com.jason.livechat;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -56,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
         Pusher pusher = new Pusher("ed2beb5c7dad70f7bfad");
 
-        Channel channel = pusher.subscribe("my-channel");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        Channel channel = pusher.subscribe(preferences.getString("room","noRoom"));
 
 
         channel.bind("my-event", new SubscriptionEventListener() {
@@ -203,8 +207,13 @@ public class MainActivity extends AppCompatActivity {
 
         RequestParams params = new RequestParams();
 
+        // get the name of the chat room
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String room = preferences.getString("room","no-data");
+
         // set our JSON object
         params.put("text", text);
+        params.put("room",room);
        // params.put("name", username);
         //params.put("time", new Date().getTime());
 
