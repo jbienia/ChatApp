@@ -216,6 +216,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 // Access each value for each key
                 Log.d("What is this", jSonRooms.getString(key).toString());
+                
             }
         }catch (Exception e) {
             Log.d("join Error", e.getMessage());
