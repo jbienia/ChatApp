@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -37,6 +38,7 @@ public class HomeActivity extends AppCompatActivity {
     ArrayList<String> roomsList;
     Iterator<String> keys;
     Context context;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 try
                 {
+                    roomsList.clear();
                     // Loops through the keys of the rooms table using an iterator. keys is an iterator object
                     while(keys.hasNext())
                     {
@@ -107,6 +110,8 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+
     }
 
     /**
@@ -118,19 +123,35 @@ public class HomeActivity extends AppCompatActivity {
         UserAdapter adapter = new UserAdapter(context,R.layout.chat,roomsList);
 
         // Attach the adapter to a ListView
-        ListView listView = (ListView) findViewById(R.id.listViewRooms);
+         listView = (ListView) findViewById(R.id.listViewRooms);
+
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // used so I can call joinRoom. bean variable isn't actually used for anything.
+                View bean = listView;
+
+                // Join room takes in the room that was clicked on in the list view
+                joinRoom(bean,listView.getItemAtPosition(position).toString());
+            }
+        });
     }
 
     /**
      * The Adapter object
      */
-    private class UserAdapter extends ArrayAdapter<String> {
+    private class UserAdapter extends ArrayAdapter<String>
+    {
 
         private ArrayList<String> items;
 
 
-        public UserAdapter(Context context, int textViewResourceId, ArrayList<String> items) {
+        public UserAdapter(Context context, int textViewResourceId, ArrayList<String> items)
+        {
             super(context, textViewResourceId, items);
             this.items = items;
         }
@@ -139,7 +160,7 @@ public class HomeActivity extends AppCompatActivity {
         //It returns a View -- a list item in the ListView -- for each item in the ArrayList
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.d("daROoom",":LKJL:KJLILK" );
+
             View v = convertView;
             if (v == null) {
                 LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -153,7 +174,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
                 if (bodyView != null) {
-                    bodyView.setText("Room: " + room);
+                    bodyView.setText(room);
                 }
             }
             return v;
@@ -172,6 +193,7 @@ public class HomeActivity extends AppCompatActivity {
 
         // Retrieves the text from the user entered field. The name of their new room
         EditText newRoom = (EditText)findViewById(R.id.edTxtNewRoom);
+        String room = newRoom.getText().toString();
 
         // Sets the value of the newly generated key in rooms table
         roomsKey.setValue(newRoom.getText().toString());
@@ -185,25 +207,22 @@ public class HomeActivity extends AppCompatActivity {
         // Adds the key value pair entered by the user to the users table
         myRef1.child("users").child(preferences.getString("userName","crap")).child(keyForRoom).setValue(newRoom.getText().toString());
 
-       // Log.d("key", roomsKey.toString());
-        Log.d("JSON", jSon.toString());
+       joinRoom(v,room);
 
-        try {
-            Log.d("Jb", ""+ jSonRooms.getString("-KgXRVZiJMbVTfnLllK0"));
-        }catch (Exception e) {
-            Log.d("error", e.getMessage());;
-        }
+
     }
+
+
 
     /**
      * Iterates throught the rooms keys and returns their values
      * @param V
      */
-    public void joinRoom(View V)
+    public void joinRoom(View V, String stringRoom)
     {
         Log.d("Check", jSon.optString("Rooms"));
         EditText room = (EditText)findViewById(R.id.edTxtNewRoom);
-        String stringRoom = room.getText().toString();
+       // String stringRoom = room.getText().toString();
 
         // keys used to iterate through the rooms
         Iterator<String> keys = (Iterator<String>)jSonRooms.keys();
@@ -215,11 +234,6 @@ public class HomeActivity extends AppCompatActivity {
             {
                 String key = keys.next();
 
-//                Log.d("ROom", room.getText().toString());
-//                Log.d("key", key);
-//                Log.d("value", jSonRooms.getString(key).toString());
-
-
                 String fromKey = jSonRooms.getString(key).toString();
 
                 Log.d("room", stringRoom);
@@ -227,16 +241,20 @@ public class HomeActivity extends AppCompatActivity {
 
                 if(fromKey.equals(stringRoom))
                 {
-                    Log.d("We in here??", "Must be");
-                    Intent intent = new Intent(this,MainActivity.class);
+                   Intent intent = new Intent(this,MainActivity.class);
 
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("room",room.getText().toString());
+                    editor.putString("room",stringRoom);
+                    //editor.putString("room",room.getText().toString());
 
                     editor.commit();
 
                     startActivity(intent);
+                }
+                else
+                {
+                    Log.d("NOPE", "NOPe ");
                 }
 
                 // Access each value for each key

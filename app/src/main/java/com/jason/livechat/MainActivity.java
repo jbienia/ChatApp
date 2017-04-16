@@ -156,12 +156,6 @@ public class MainActivity extends AppCompatActivity {
             holder.bodyView.setText(message.text);
             holder.senderView.setText(message.name);
 
-            // fetch the user's Twitter avatar from their username
-            // and place it into the thumbnailImageView.
-//            Picasso.with(messageContext).
-//                    load("https://twitter.com/" + message.name + "/profile_image?size=original").
-//                    placeholder(R.mipmap.ic_launcher).
-//                    into(holder.thumbnailImageView);
 
             return convertView;
         }
@@ -177,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
             messageList.add(message);
             notifyDataSetChanged();
         }
-
 
     }
 
@@ -214,8 +207,6 @@ public class MainActivity extends AppCompatActivity {
         // set our JSON object
         params.put("text", text);
         params.put("room",room);
-       // params.put("name", username);
-        //params.put("time", new Date().getTime());
 
         // create our HTTP client
         AsyncHttpClient client = new AsyncHttpClient();
