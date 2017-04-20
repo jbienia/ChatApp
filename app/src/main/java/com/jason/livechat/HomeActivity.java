@@ -15,15 +15,12 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -50,8 +47,6 @@ public class HomeActivity extends AppCompatActivity {
          roomsList = new ArrayList<String>();
 
         context = this;
-
-
 
         myRef1.addValueEventListener(new ValueEventListener() {
 
@@ -99,7 +94,6 @@ public class HomeActivity extends AppCompatActivity {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-
     }
 
     @Override
@@ -110,7 +104,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
 
     }
 
@@ -146,9 +139,7 @@ public class HomeActivity extends AppCompatActivity {
      */
     private class UserAdapter extends ArrayAdapter<String>
     {
-
         private ArrayList<String> items;
-
 
         public UserAdapter(Context context, int textViewResourceId, ArrayList<String> items)
         {
@@ -208,11 +199,7 @@ public class HomeActivity extends AppCompatActivity {
         myRef1.child("users").child(preferences.getString("userName","crap")).child(keyForRoom).setValue(newRoom.getText().toString());
 
        joinRoom(v,room);
-
-
     }
-
-
 
     /**
      * Iterates throught the rooms keys and returns their values
@@ -222,11 +209,10 @@ public class HomeActivity extends AppCompatActivity {
     {
         Log.d("Check", jSon.optString("Rooms"));
         EditText room = (EditText)findViewById(R.id.edTxtNewRoom);
-       // String stringRoom = room.getText().toString();
 
         // keys used to iterate through the rooms
         Iterator<String> keys = (Iterator<String>)jSonRooms.keys();
-       // Log.d("keys", keys.);
+
 
         // Loops through the keys in the Rooms table
         try {
@@ -246,7 +232,6 @@ public class HomeActivity extends AppCompatActivity {
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("room",stringRoom);
-                    //editor.putString("room",room.getText().toString());
 
                     editor.commit();
 

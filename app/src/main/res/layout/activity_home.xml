@@ -34,23 +34,25 @@
         android:text="OK" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="326dp"
         android:layout_weight="0.37"
         android:orientation="horizontal"
-        android:weightSum="1"
-         >
+        android:weightSum="1">
 
 
         <ListView
             android:id="@+id/listViewRooms"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="408dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:layout_gravity="right"
             android:layout_weight="90"
             android:background="@android:color/holo_orange_light"
             android:divider="@android:color/black"
-             />
+            android:dividerHeight="1dp" />
     </LinearLayout>
 
 

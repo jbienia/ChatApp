@@ -17,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -25,11 +24,8 @@ import com.loopj.android.http.RequestParams;
 import com.pusher.client.Pusher;
 import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.SubscriptionEventListener;
-
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-
 import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity {
@@ -40,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final ListView messagesView = (ListView) findViewById(R.id.messages_view);
@@ -62,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         Channel channel = pusher.subscribe(preferences.getString("room","noRoom"));
 
-
         channel.bind("my-event", new SubscriptionEventListener() {
             @Override
             public void onEvent(String channelName, String eventName, final String data) {
@@ -82,10 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
         pusher.connect();
 
-
         // Create the adapter that will bind to our list view
         messageAdapter = new MessageAdapter(this, new ArrayList<Message>());
-        Log.d("JB", messagesView.toString());
 
         messagesView.setAdapter(messageAdapter);
     }
@@ -156,22 +148,18 @@ public class MainActivity extends AppCompatActivity {
             holder.bodyView.setText(message.text);
             holder.senderView.setText(message.name);
 
-
             return convertView;
         }
 
         public MessageAdapter(Context context, ArrayList<Message> messages) {
             messageList = messages;
             messageContext = context;
-
-
         }
 
         public void add(Message message){
             messageList.add(message);
             notifyDataSetChanged();
         }
-
     }
 
     /**
@@ -197,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-
         RequestParams params = new RequestParams();
 
         // get the name of the chat room
@@ -213,8 +200,6 @@ public class MainActivity extends AppCompatActivity {
         String url = "http://10.0.2.2";
 
         client.post(url + "/messages", params, new JsonHttpResponseHandler(){
-
-
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -236,8 +221,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.LENGTH_LONG
                 ).show();
             }
-
         });
-
     }
 }

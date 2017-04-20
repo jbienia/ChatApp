@@ -45,17 +45,12 @@ public class Login extends AppCompatActivity {
                 Object value = dataSnapshot.getValue();
 
                 tester = dataSnapshot;
-               // DataSnapshot convert = dataSnapshot.child("users").child("BJones");
-                //Object users = convert.getValue();
-
-
 
                 Gson gSon = new Gson();
 
                 try
                 {
                      jSon = new JSONObject(value.toString());
-                   // jSonUsers = new JSONObject(users.toString());
 
                 }
                 catch(Exception e) {
@@ -67,14 +62,6 @@ public class Login extends AppCompatActivity {
                     // Retrieves the password given a specific user name
                     log.d("JB",jSonUsers.optString("password").toString());
 
-                    //JSONArray thing =  jSon.getJSONArray("users");
-                    //Log.d("THING",jSon.getJSONObject("users").get("Lury"));
-
-                    //Object lury = jSon.getJSONObject("users").get("Lury");
-
-                    // substing retrives the password
-                   // Log.d("THING", thing.substring(12,thing.length() - 1));
-                    // used to detect if there is a current user in the database
                     log.d("BOOL",""+jSon.getJSONObject("users").has("ben"));
                 }
                 catch(Exception e) {
@@ -101,11 +88,6 @@ public class Login extends AppCompatActivity {
 
     public void login(View view)
     {
-       // DataSnapshot value = convert.child("users");
-        // Changes the button text to register a new user
-       // Button signIn = (Button)findViewById(R.id.email_sign_in_button);
-        //signIn.setText("Register");
-
         EditText userNameTextField = (EditText)findViewById(R.id.email);
         username = userNameTextField.getText().toString();
         EditText passwordTextField = (EditText) findViewById(R.id.password);
@@ -125,10 +107,6 @@ public class Login extends AppCompatActivity {
 
         Log.d("USER", jSonUsers.toString());
 
-
-
-
-
         try
         {
             if(jSon.getJSONObject("users").has(username))
@@ -146,35 +124,10 @@ public class Login extends AppCompatActivity {
                             passwordFromDatabase = jSonUsers.getString(key);
                             Log.d("DBpwrd", passwordFromDatabase);
                         }
-
-
-
-
-
-                        // Access each value for each key
-                        //Log.d("What is this", jSon.getString(key).toString());
                     }
                 }catch (Exception e) {
                     Log.d("join Error", e.getMessage());
-
                 }
-
-
-                // the password from the database
-                //passwordFromDatabase = jSon.getJSONObject("users").optString(username);
-                //log.d("JB",passwordFromDatabase.substring(12,passwordFromDatabase.length() - 1));
-                //log.d("PWORD",password);
-
-//                try {
-//                    String pWord = jSon.getJSONObject("BJones").optString("password");
-//                    Log.d("Blep",pWord);
-//
-//                }catch (Exception e)
-//                {
-//                    Log.d("TESTER", "works");
-//                    e.getMessage();
-//                }
-
 
                 // Checks that the password from the datbase is the same as the one entered by the user
                 if(passwordFromDatabase.equals(password))
@@ -194,11 +147,9 @@ public class Login extends AppCompatActivity {
             e.getMessage();
         }
 
-
         // These next three lines are unused
         mDatabase = FirebaseDatabase.getInstance();
         reference = mDatabase.getReference();
         reference.orderByChild("Users");
-
     }
 }
